@@ -42,33 +42,109 @@ function diskCreator(number, className){
 
 // for Move A --> B use this: moves.push([A, B])
 function hanoi(from, via, to, n) {
-    return
+    if(n==1)
+    moves.push([from,to])
+    else
+        hanoi(from,to,via,n-1)
+        moves.push([from,to])
+        hanoi(via,from,to,n-1)
+
+
 }
 
 function exHanoi_1(start, aux, end, n) {
-    alert("your function is not complete")
-    return
-}  
+    hanoi(end, start, aux, 3 * n);
+
+    hanoi(start, aux, end, n);
+
+    hanoi(aux, start, end, 5 * n);
+}
 
 function exHanoi_2(A, B, C, D, n) {
-    alert("your function is not complete")
-    return
+    if (n <= 0) return;
+
+    if (n === 1) {
+        moves.push([A, C]);
+        return;
+    }
+
+    if (n === 2) {
+        moves.push([A, C]);
+        moves.push([A, D]);
+        return;
+    }
+
+    exHanoi_2(A, B, C, D, n - 2);
+
+    if (n % 2 === 0) {
+        const count = (n - 2) / 2;
+        moves.push([A, C]);
+        hanoi(D, A, B, count);
+        moves.push([A, D]);
+        hanoi(B, A, D, count);
+    } else {
+        const count = (n - 1) / 2;
+        moves.push([A, D]);
+        hanoi(C, A, B, count);
+        moves.push([A, C]);
+        hanoi(B, A, C, count);
+    }
 }
 
 function exhanoi_3(A, B, C, n) {
-    alert("your function is not complete")
-    return
+    if (n <= 0) return;
+    exhanoi_3(A, B, C, n - 1);
+    hanoi(C, A, B, 5 * (n - 1));
+    moves.push([A, C]);
+    moves.push([A, C]);
+    hanoi(B, A, C, 5 * (n - 1));
+    hanoi(B, A, C, 3);
 }
 
 function exhanoi_4(A, B, C, D, n) {
-    alert("your function is not complete")
-    return
+    if (n <= 0) return;
+
+    function solve4(from, to, aux1, aux2, k) {
+        if (k <= 0) return;
+        if (k === 1) {
+            moves.push([from, to]);
+            return;
+        }
+        solve4(from, aux2, aux1, to, k - 1);
+        moves.push([from, to]);
+        solve4(aux2, to, from, aux1, k - 1);
+    }
+
+    solve4(A, C, D, B, Number(n));
 }
 
 function exhanoi_5(A, B, C, D, n) {
-    alert("your function is not complete")
-    return
+    if (n <= 0) return;
+
+    function moveAdjacent(k, dir) {
+        if (k <= 0) return;
+        if (dir === 1) {
+            moveAdjacent(k - 1, 1);
+            moves.push([A, B]);
+            moveAdjacent(k - 1, -1);
+            moves.push([B, C]);
+            moveAdjacent(k - 1, 1);
+            moves.push([C, D]);
+            moveAdjacent(k - 1, -1);
+        } else {
+            moveAdjacent(k - 1, -1);
+            moves.push([D, C]);
+            moveAdjacent(k - 1, 1);
+            moves.push([C, B]);
+            moveAdjacent(k - 1, -1);
+            moves.push([B, A]);
+            moveAdjacent(k - 1, 1);
+        }
+    }
+
+    moveAdjacent(Number(n), 1);
 }
+
 
 function moveDisks(from, to){
     const fromEl = rods[from];
